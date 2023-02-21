@@ -83,6 +83,7 @@ def main():
             movie = movies[path[i + 1][0]]["title"]
             print(f"{i + 1}: {person1} and {person2} starred in {movie}")
 
+
 def get_paths(node):
     path = []
     while node.parent != None:
@@ -90,6 +91,7 @@ def get_paths(node):
         node = node.parent
     path.reverse()
     return path
+
 
 def explore_paths(node, target, explored=[]):
     frontier = QueueFrontier()
@@ -107,6 +109,7 @@ def explore_paths(node, target, explored=[]):
                     Node(actor, node, (movie, actor))
                 )
 
+
 def shortest_path(source, target):
     """
     Returns the shortest list of (movie_id, person_id) pairs
@@ -122,6 +125,7 @@ def shortest_path(source, target):
                 paths.append(path)
     if len(paths) > 0:
         return min(paths, key=len)
+
 
 def person_id_for_name(name):
     """
