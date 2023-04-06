@@ -84,32 +84,6 @@ def main():
             print(f"{i + 1}: {person1} and {person2} starred in {movie}")
 
 
-def get_paths(node):
-    path = []
-    while node.parent != None:
-        path.append(node.action)
-        node = node.parent
-    path.reverse()
-    return path
-
-
-def explore_paths(node, target, explored=[]):
-    frontier = QueueFrontier()
-    frontier.add(node)
-    while not frontier.empty():
-        node = frontier.remove()
-        explored.append(node.state)
-        for movie, actor in neighbors_for_person(node.state):
-            if actor != node.state and actor not in explored:
-                if actor == target:
-                    return get_paths(
-                        Node(actor, node, (movie, actor))
-                    )
-                frontier.add(
-                    Node(actor, node, (movie, actor))
-                )
-
-
 def shortest_path(source, target):
     """
     Returns the shortest list of (movie_id, person_id) pairs
@@ -117,6 +91,30 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
+    def explore_paths(node, target, explored=[]):
+        frontier = QueueFrontier()
+        frontier.add(node)
+        while not frontier.empty():
+            node = frontier.remove()
+            explored.append(node.state)
+            for movie, actor in neighbors_for_person(node.state):
+                if actor != node.state and actor not in explored:
+                    if actor == target:
+                        return get_paths(
+                            Node(actor, node, (movie, actor))
+                        )
+                    frontier.add(
+                        Node(actor, node, (movie, actor))
+                    )
+    
+    def get_paths(node):
+        path = []
+        while node.parent != None:
+            path.append(node.action)
+            node = node.parent
+        path.reverse()
+        return path
+
     paths = []
     for movie, actor in neighbors_for_person(source):
         if actor != source:
@@ -125,6 +123,7 @@ def shortest_path(source, target):
                 paths.append(path)
     if len(paths) > 0:
         return min(paths, key=len)
+    return None
 
 
 def person_id_for_name(name):
