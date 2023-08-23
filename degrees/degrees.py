@@ -91,6 +91,15 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
+
+    def get_paths(node):
+        path = []
+        while node.parent != None:
+            path.append(node.action)
+            node = node.parent
+        path.reverse()
+        return path
+
     def explore_paths(node, target, explored=[]):
         frontier = QueueFrontier()
         frontier.add(node)
@@ -106,14 +115,6 @@ def shortest_path(source, target):
                     frontier.add(
                         Node(actor, node, (movie, actor))
                     )
-    
-    def get_paths(node):
-        path = []
-        while node.parent != None:
-            path.append(node.action)
-            node = node.parent
-        path.reverse()
-        return path
 
     paths = []
     for movie, actor in neighbors_for_person(source):
